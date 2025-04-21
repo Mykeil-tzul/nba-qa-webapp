@@ -1,12 +1,10 @@
 import streamlit as st
 import openai
 import os
-from dotenv import load_dotenv
 from nba_data import get_player_id, get_player_stats
 
-# Load OpenAI API key
-load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# ✅ Use API key from Streamlit secrets
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 st.set_page_config(page_title="NBA Player Stats Q&A", page_icon="🏀")
 st.title("🏀 NBA Player Stats Viewer")
@@ -29,7 +27,7 @@ if player_1:
         st.error(f"Player {player_1} not found.")
 
 # --- Optional: Player 2 ---
-st.subheader("🅾️ Compare With Another Player (Optional)")
+st.subheader("🆚 Compare With Another Player (Optional)")
 player_2 = st.text_input("Enter Player 2 Full Name (e.g., Kevin Durant):", key="player_2")
 if player_2:
     player_2_id = get_player_id(player_2)
@@ -51,7 +49,7 @@ user_question = st.text_input("Ask a question like 'Who had more assists in 2023
 
 if user_question:
     with st.spinner("🤖 Thinking..."):
-        prompt = f"You are an NBA analytics expert. Answer the following question using your basketball knowledge: {user_question}"
+        prompt = f"You are an NBA analytics expert. Answer this question:\n{user_question}"
         try:
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
