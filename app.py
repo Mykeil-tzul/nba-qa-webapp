@@ -1,48 +1,64 @@
 import streamlit as st
+import openai
+import os
+from dotenv import load_dotenv
 from nba_data import get_player_id, get_player_stats
 
-st.set_page_config(page_title="NBA Player Comparison", page_icon="🏀")
-st.title("🏀 NBA Player Comparison App")
+# Load OpenAI API key
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# Inputs
-player_1_name = st.text_input("Enter first player name (e.g., LeBron James):")
-player_2_name = st.text_input("Enter second player name (e.g., Stephen Curry):")
+st.set_page_config(page_title="NBA Player Stats Q&A", page_icon="🏀")
+st.title("🏀 NBA Player Stats Viewer")
 
-# Button
-if st.button("Compare Stats"):
+# --- Player 1 ---
+st.subheader("🔎 Player 1")
+player_1 = st.text_input("Enter Player 1 Full Name (e.g., LeBron James):", key="player_1")
+if player_1:
+    player_1_id = get_player_id(player_1)
+    if player_1_id:
+        stats_1 = get_player_stats(player_1_id)
+        if stats_1 is not None:
+            seasons_1 = stats_1["SEASON_ID"].unique().tolist()
+            selected_season_1 = st.selectbox(f"Select Season for {player_1}", seasons_1[::-1], key="season_1")
+            st.write(f"📊 Stats for {player_1} in {selected_season_1}")
+            st.dataframe(stats_1[stats_1["SEASON_ID"] == selected_season_1].reset_index(drop=True))
+        else:
+            st.warning(f"No stats found for {player_1}")
+    else:
+        st.error(f"Player {player_1} not found.")
 
-    col1, col2 = st.columns(2)
+# --- Optional: Player 2 ---
+st.subheader("🅾️ Compare With Another Player (Optional)")
+player_2 = st.text_input("Enter Player 2 Full Name (e.g., Kevin Durant):", key="player_2")
+if player_2:
+    player_2_id = get_player_id(player_2)
+    if player_2_id:
+        stats_2 = get_player_stats(player_2_id)
+        if stats_2 is not None:
+            seasons_2 = stats_2["SEASON_ID"].unique().tolist()
+            selected_season_2 = st.selectbox(f"Select Season for {player_2}", seasons_2[::-1], key="season_2")
+            st.write(f"📊 Stats for {player_2} in {selected_season_2}")
+            st.dataframe(stats_2[stats_2["SEASON_ID"] == selected_season_2].reset_index(drop=True))
+        else:
+            st.warning(f"No stats found for {player_2}")
+    else:
+        st.error(f"Player {player_2} not found.")
 
-    with col1:
-        if player_1_name:
-            player_1_id = get_player_id(player_1_name)
-            if player_1_id:
-                stats_df_1 = get_player_stats(player_1_id)
-                if stats_df_1 is not None:
-                    seasons_1 = stats_df_1["SEASON_ID"].unique().tolist()
-                    selected_season_1 = st.selectbox(f"{player_1_name} - Select Season", seasons_1[::-1])
-                    season_stats_1 = stats_df_1[stats_df_1["SEASON_ID"] == selected_season_1]
-                    st.subheader(f"📊 {player_1_name} ({selected_season_1})")
-                    st.dataframe(season_stats_1.reset_index(drop=True))
-                else:
-                    st.warning(f"No stats found for {player_1_name}")
-            else:
-                st.error(f"Player not found: {player_1_name}")
+# --- OpenAI Q&A Section ---
+st.subheader("💬 Ask the AI About NBA Players")
+user_question = st.text_input("Ask a question like 'Who had more assists in 2023?' or 'Compare LeBron and Durant':")
 
-    with col2:
-        if player_2_name:
-            player_2_id = get_player_id(player_2_name)
-            if player_2_id:
-                stats_df_2 = get_player_stats(player_2_id)
-                if stats_df_2 is not None:
-                    seasons_2 = stats_df_2["SEASON_ID"].unique().tolist()
-                    selected_season_2 = st.selectbox(f"{player_2_name} - Select Season", seasons_2[::-1])
-                    season_stats_2 = stats_df_2[stats_df_2["SEASON_ID"] == selected_season_2]
-                    st.subheader(f"📊 {player_2_name} ({selected_season_2})")
-                    st.dataframe(season_stats_2.reset_index(drop=True))
-                else:
-                    st.warning(f"No stats found for {player_2_name}")
-            else:
-                st.error(f"Player not found: {player_2_name}")
-
-
+if user_question:
+    with st.spinner("🤖 Thinking..."):
+        prompt = f"You are an NBA analytics expert. Answer the following question using your basketball knowledge: {user_question}"
+        try:
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.7,
+                max_tokens=150
+            )
+            st.success(response.choices[0].message["content"])
+        except Exception as e:
+            st.error(f"Error: {e}")

@@ -1,7 +1,9 @@
+import streamlit as st
 from nba_api.stats.static import players
 from nba_api.stats.endpoints import playercareerstats
 
-# ✅ Step 1: Search player by full name
+# ✅ Step 1: Search player by full name (with cache)
+@st.cache_data(show_spinner=False)
 def get_player_id(player_name):
     try:
         player_dict = players.find_players_by_full_name(player_name)
@@ -12,7 +14,8 @@ def get_player_id(player_name):
         print(f"❌ Error fetching player ID: {e}")
         return None
 
-# ✅ Step 2: Get player career stats
+# ✅ Step 2: Get player career stats (with cache)
+@st.cache_data(show_spinner=False)
 def get_player_stats(player_id):
     try:
         career = playercareerstats.PlayerCareerStats(player_id=player_id)
@@ -36,7 +39,6 @@ if __name__ == "__main__":
             print("⚠️ No stats found.")
     else:
         print("🚫 Player not found.")
-
 
 
 
