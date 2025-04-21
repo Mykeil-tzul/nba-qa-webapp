@@ -1,34 +1,50 @@
-# 🏀 NBA Q&A Stats App
+# 🏀 NBA Q&A Web App
 
-**Ask questions, get stats. Instantly.**  
-This app lets you search NBA players and view their season-by-season stats using the official `nba_api`. Built with Python + Streamlit.
+A sleek, interactive NBA player stats explorer built with **Streamlit**, **nba_api**, and **OpenAI GPT-3.5**.
 
-> 🔗 [Live App](https://nba-app-webapp.streamlit.app/)
+This web app allows anyone—from casual fans to data pros—to:
+- 🔍 Search for any NBA player
+- 📊 View season-by-season stats
+- 🆚 Compare two players side-by-side
+- 🤖 Ask any basketball-related question (e.g. "Who had more assists in 2023?")
 
----
-
-## 📌 Features
-
-- 🔍 Search any NBA player (e.g. *LeBron James*, *Kyrie Irving*)
-- 📊 Select a season to view detailed stats
-- 🔁 Compare 2 players (optional)
-- ⚠️ Handles errors like misspelled names or unavailable stats
+🎯 **Live App** → [nba-app-webapp.streamlit.app](https://nba-app-webapp.streamlit.app/)
 
 ---
 
-## 🚀 Tech Stack
+## 🚀 Features
 
-- Python
-- Streamlit
-- nba_api
-- pandas
+- 🔎 **Search Players:** By full name (e.g., "LeBron James")
+- 📆 **Filter by Season:** View any season’s stats going back to their rookie year
+- 🆚 **Compare Players:** Select a second player and compare both
+- 🤖 **AI Assistant:** Ask questions powered by OpenAI’s GPT-3.5
+- 💡 Uses official NBA stats from [nba_api](https://github.com/swar/nba_api)
 
 ---
 
-## 📦 How to Run Locally
+## 🛠️ Tech Stack
+
+| Tool            | Use Case                                |
+|-----------------|------------------------------------------|
+| Streamlit       | Web app framework                        |
+| nba_api         | NBA stats and player data                |
+| OpenAI GPT-3.5  | Natural language Q&A                     |
+| Python          | Backend and data handling                |
+| dotenv + secrets.toml | Secure API key management         |
+
+---
+
+## 📦 Setup Locally
 
 ```bash
+# Clone repo
 git clone https://github.com/Mykeil-tzul/nba-qa-webapp.git
 cd nba-qa-webapp
+
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install dependencies
 pip install -r requirements.txt
-streamlit run app.py
+
