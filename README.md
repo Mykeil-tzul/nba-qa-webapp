@@ -8,7 +8,7 @@ This web app allows anyone—from casual fans to data pros—to:
 - 🆚 Compare two players side-by-side
 - 🤖 Ask any basketball-related question (e.g. "Who had more assists in 2023?")
 
-🎯 **Live App** → [nba-app-webapp.streamlit.app](https://nba-app-webapp.streamlit.app/)
+🎯 **Live App** → (https://mt-nba-app-webapp.streamlit.app)
 
 ---
 
