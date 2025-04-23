@@ -1,68 +1,67 @@
 import streamlit as st
-import openai
+import pandas as pd
 from nba_data import get_player_id, get_player_stats
+import altair as alt
 
-# Set page config
-st.set_page_config(page_title="NBA Player Stats Q&A", page_icon="🏀")
-st.title("🏀 NBA Player Stats Q&A App")
+st.set_page_config(page_title="NBA Head-to-Head", page_icon="🏀")
+st.title("🏀 NBA Head-to-Head Player Comparison")
 
-# 🔐 Load OpenAI API Key
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+# --- Player 1 ---
+player_1 = st.text_input("🔎 Player 1 Full Name", key="player_1")
+player_2 = st.text_input("🆚 Player 2 Full Name", key="player_2")
 
-# --- Player 1 Section ---
-st.subheader("🔎 Player 1")
-player_1 = st.text_input("Enter Player 1 Full Name (e.g., LeBron James)", key="player_1")
 stats_1 = None
-selected_season_1 = None
-
-if player_1:
-    player_1_id = get_player_id(player_1)
-    if player_1_id:
-        stats_1 = get_player_stats(player_1_id)
-        if stats_1 is not None and not stats_1.empty:
-            seasons_1 = stats_1["SEASON_ID"].unique().tolist()[::-1]
-            selected_season_1 = st.selectbox(f"Select Season for {player_1}", seasons_1, key="season_1")
-            st.write(f"📊 Stats for {player_1} in {selected_season_1}")
-            st.dataframe(stats_1[stats_1["SEASON_ID"] == selected_season_1].reset_index(drop=True))
-        else:
-            st.warning(f"No stats found for {player_1}")
-    else:
-        st.error(f"Player {player_1} not found.")
-
-# --- Player 2 Section ---
-st.subheader("🆚 Compare With Another Player (Optional)")
-player_2 = st.text_input("Enter Player 2 Full Name (e.g., Kevin Durant)", key="player_2")
 stats_2 = None
-selected_season_2 = None
+season_selected = None
 
-if player_2:
+if player_1 and player_2:
+    player_1_id = get_player_id(player_1)
     player_2_id = get_player_id(player_2)
-    if player_2_id:
+
+    if player_1_id and player_2_id:
+        stats_1 = get_player_stats(player_1_id)
         stats_2 = get_player_stats(player_2_id)
-        if stats_2 is not None and not stats_2.empty:
-            seasons_2 = stats_2["SEASON_ID"].unique().tolist()[::-1]
-            selected_season_2 = st.selectbox(f"Select Season for {player_2}", seasons_2, key="season_2")
-            st.write(f"📊 Stats for {player_2} in {selected_season_2}")
-            st.dataframe(stats_2[stats_2["SEASON_ID"] == selected_season_2].reset_index(drop=True))
+
+        common_seasons = sorted(
+            list(set(stats_1["SEASON_ID"]).intersection(set(stats_2["SEASON_ID"]))), reverse=True
+        )
+
+        if common_seasons:
+            season_selected = st.selectbox("📅 Select Season", common_seasons)
+
+            df_1 = stats_1[stats_1["SEASON_ID"] == season_selected]
+            df_2 = stats_2[stats_2["SEASON_ID"] == season_selected]
+
+            st.subheader(f"📊 {player_1} vs {player_2} - {season_selected}")
+            combined = pd.DataFrame({
+                "Stat": ["PTS", "AST", "REB", "STL", "BLK"],
+                player_1: [
+                    float(df_1["PTS"].values[0]),
+                    float(df_1["AST"].values[0]),
+                    float(df_1["REB"].values[0]),
+                    float(df_1["STL"].values[0]),
+                    float(df_1["BLK"].values[0]),
+                ],
+                player_2: [
+                    float(df_2["PTS"].values[0]),
+                    float(df_2["AST"].values[0]),
+                    float(df_2["REB"].values[0]),
+                    float(df_2["STL"].values[0]),
+                    float(df_2["BLK"].values[0]),
+                ],
+            })
+
+            chart_data = combined.melt("Stat", var_name="Player", value_name="Value")
+
+            chart = alt.Chart(chart_data).mark_bar().encode(
+                x="Stat:N",
+                y="Value:Q",
+                color="Player:N",
+                tooltip=["Player", "Stat", "Value"]
+            ).properties(width=600, height=400)
+
+            st.altair_chart(chart, use_container_width=True)
         else:
-            st.warning(f"No stats found for {player_2}")
+            st.warning("These players do not have overlapping seasons.")
     else:
-        st.error(f"Player {player_2} not found.")
-
-# --- OpenAI Chat Section ---
-st.subheader("💬 Ask the AI About NBA Players")
-st.caption("Ask a question like 'Who had more assists in 2023?' or 'Compare LeBron and Durant:'")
-user_question = st.text_input("Your question:")
-
-if user_question:
-    with st.spinner("🤖 Thinking..."):
-        try:
-            response = openai.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[{"role": "user", "content": user_question}],
-                temperature=0.7,
-                max_tokens=150
-            )
-            st.success(response.choices[0].message.content)
-        except Exception as e:
-            st.error(f"OpenAI Error: {e}")
+        st.error("One or both players not found.")
