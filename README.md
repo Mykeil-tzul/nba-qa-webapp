@@ -1,50 +1,49 @@
-# 🏀 NBA Q&A Web App
+# 🏀 StatMatch: NBA Player Head-to-Head Stats App
 
-A sleek, interactive NBA player stats explorer built with **Streamlit**, **nba_api**, and **OpenAI GPT-3.5**.
+Compare your favorite NBA players side-by-side, season by season.
 
-This web app allows anyone—from casual fans to data pros—to:
-- 🔍 Search for any NBA player
-- 📊 View season-by-season stats
-- 🆚 Compare two players side-by-side
-- 🤖 Ask any basketball-related question (e.g. "Who had more assists in 2023?")
+## 🚀 Live App
+🔗 [Launch StatMatch](https://mt-nba-app-webapp.streamlit.app/)
 
-🎯 **Live App** → (https://mt-nba-app-webapp.streamlit.app)
+## 🔍 What It Does
+- Enter any **two NBA players**
+- Choose a season for each
+- Instantly compare key stats in a clean side-by-side layout
+- Visualize the results with a bar chart
 
----
+Perfect for NBA fans, analysts, and curious hoop heads 🧠
 
-## 🚀 Features
+## ⚙️ Built With
+- `Streamlit` for the web UI
+- `nba_api` for real-time NBA stats
+- `pandas` for data handling
+- `matplotlib` for simple visuals
 
-- 🔎 **Search Players:** By full name (e.g., "LeBron James")
-- 📆 **Filter by Season:** View any season’s stats going back to their rookie year
-- 🆚 **Compare Players:** Select a second player and compare both
-- 🤖 **AI Assistant:** Ask questions powered by OpenAI’s GPT-3.5
-- 💡 Uses official NBA stats from [nba_api](https://github.com/swar/nba_api)
+## 🛠️ Run It Locally
 
----
-
-## 🛠️ Tech Stack
-
-| Tool            | Use Case                                |
-|-----------------|------------------------------------------|
-| Streamlit       | Web app framework                        |
-| nba_api         | NBA stats and player data                |
-| OpenAI GPT-3.5  | Natural language Q&A                     |
-| Python          | Backend and data handling                |
-| dotenv + secrets.toml | Secure API key management         |
-
----
-
-## 📦 Setup Locally
-
+1. Clone the repo:
 ```bash
-# Clone repo
 git clone https://github.com/Mykeil-tzul/nba-qa-webapp.git
 cd nba-qa-webapp
+```
 
-# Create virtual environment
+2. Create & activate a virtual environment:
+```bash
 python3 -m venv venv
 source venv/bin/activate
+```
 
-# Install dependencies
+3. Install the requirements:
+```bash
 pip install -r requirements.txt
+```
 
+4. Run the app:
+```bash
+streamlit run app.py
+```
+
+## 🙌 Why I Built This
+As a former pro hooper turned data engineer, I'm passionate about merging basketball with real-time data. This app is part of my 2025 project roadmap.
+
+More coming soon 👀
