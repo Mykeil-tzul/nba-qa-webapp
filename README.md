@@ -1,49 +1,37 @@
-# 🏀 StatMatch: NBA Player Head-to-Head Stats App
+# 🏀 StatMatch
 
-Compare your favorite NBA players side-by-side, season by season.
+**StatMatch** is a sleek, interactive web app that lets you compare NBA players head-to-head by season. Built with Streamlit and powered by real NBA data, it's your go-to tool for quick, visual player comparisons.
 
-## 🚀 Live App
-🔗 [Launch StatMatch](https://mt-nba-app-webapp.streamlit.app/)
+## 🔥 Features
 
-## 🔍 What It Does
-- Enter any **two NBA players**
-- Choose a season for each
-- Instantly compare key stats in a clean side-by-side layout
-- Visualize the results with a bar chart
+- Compare any two NBA players side-by-side
+- Select specific seasons for accurate stats
+- Visualize stats with intuitive bar charts
+- Clean, responsive design for all devices
 
-Perfect for NBA fans, analysts, and curious hoop heads 🧠
+## 🚀 Try It Out
 
-## ⚙️ Built With
-- `Streamlit` for the web UI
-- `nba_api` for real-time NBA stats
-- `pandas` for data handling
-- `matplotlib` for simple visuals
+👉 [Launch the App](https://statmatch.streamlit.app)
 
-## 🛠️ Run It Locally
+## 🛠️ Built With
 
-1. Clone the repo:
-```bash
-git clone https://github.com/Mykeil-tzul/nba-qa-webapp.git
-cd nba-qa-webapp
-```
+- [Streamlit](https://streamlit.io/)
+- [pandas](https://pandas.pydata.org/)
+- [Altair](https://altair-viz.github.io/)
 
-2. Create & activate a virtual environment:
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
+## 📸 Preview
 
-3. Install the requirements:
-```bash
-pip install -r requirements.txt
-```
+![StatMatch Screenshot](screenshot.png)
 
-4. Run the app:
-```bash
-streamlit run app.py
-```
+## 📂 Project Structure
 
-## 🙌 Why I Built This
-As a former pro hooper turned data engineer, I'm passionate about merging basketball with real-time data. This app is part of my 2025 project roadmap.
+statmatch/ ├── app.py ├── nba_data.py ├── requirements.txt └── .streamlit/ └── config.toml
 
-More coming soon 👀
+
+## 📬 Feedback
+
+Have suggestions or feedback? Feel free to open an issue or reach out!
+
+---
+
+*Built by [Mykeil Tzul](https://github.com/Mykeil-tzul)*
