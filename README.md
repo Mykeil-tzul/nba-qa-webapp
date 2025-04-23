@@ -19,10 +19,6 @@
 - [pandas](https://pandas.pydata.org/)
 - [Altair](https://altair-viz.github.io/)
 
-## 📸 Preview
-
-![StatMatch Screenshot](screenshot.png)
-
 ## 📂 Project Structure
 
 statmatch/ ├── app.py ├── nba_data.py ├── requirements.txt └── .streamlit/ └── config.toml
