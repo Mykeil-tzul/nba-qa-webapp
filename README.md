@@ -19,6 +19,15 @@
 - [pandas](https://pandas.pydata.org/)
 - [Altair](https://altair-viz.github.io/)
 
+## 🧠 Challenges Faced
+
+- **Learning API Requests with nba_api:** Making reliable and structured calls to fetch live player data took several attempts and debugging steps.
+
+- **Building a Web App (First Time):** Streamlit was new to me, and setting up a clean, responsive layout took trial and error.
+
+- **Deployment Debugging:** Pushing to Streamlit Cloud caused issues due to missing packages and folder structure — I learned to separate app logic from environment setup.
+
+
 ## 📂 Project Structure
 
 statmatch/ ├── app.py ├── nba_data.py ├── requirements.txt └── .streamlit/ └── config.toml
